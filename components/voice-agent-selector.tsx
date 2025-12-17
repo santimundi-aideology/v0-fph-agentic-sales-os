@@ -19,54 +19,103 @@ export interface VoiceAgent {
   icon: React.ReactNode
   color: string
   status: "available" | "preparing" | "unavailable"
+  voiceAgentId?: string // The actual voice agent ID (e.g., ElevenLabs agent ID)
 }
 
 const voiceAgents: VoiceAgent[] = [
   {
     id: "agent-1",
-    name: "Option 1",
+    name: "Real Estate Agent (Arabic/Saudi + English) - Male",
     description: "Expert in property sales and customer relations",
     icon: <User className="h-5 w-5" />,
     color: "bg-blue-500",
-    status: "preparing",
+    status: "available",
+    voiceAgentId: "agent_5801kc9fq5m8fz2v8w5xvtq1ad9v", // ElevenLabs agent ID
   },
   {
     id: "agent-2",
-    name: "Option 2",
+    name: "Luxury Property Specialist (Egyptian + English) - Male",  
     description: "Specialized in high-end properties and VIP clients",
     icon: <Sparkles className="h-5 w-5" />,
     color: "bg-purple-500",
-    status: "preparing",
+    status: "available",
+    voiceAgentId: "agent_9701kcmvm3zmf82a4fcwq8fkdp4k", // ElevenLabs agent ID
   },
   {
     id: "agent-3",
-    name: "Option 3",
+    name: "Customer Service Agent (Arabic/Saudi + English) - Woman",
     description: "Focused on understanding client needs and preferences",
     icon: <Headphones className="h-5 w-5" />,
     color: "bg-emerald-500",
-    status: "preparing",
+    status: "available",
+    voiceAgentId: "agent_7101kcmvvpj2fh4sj4tzdcya7rmz", // ElevenLabs agent ID
   },
   {
     id: "agent-4",
-    name: "Option 4",
-    description: "Handles inquiries and provides general assistance",
+    name: "Appointment Coordinator (Arabic/Saudi + English) - Man",
+    description: "Handles scheduling and appointment management",
     icon: <Mic className="h-5 w-5" />,
     color: "bg-amber-500",
-    status: "preparing",
+    status: "available",
+    voiceAgentId: "agent_4001kcmvzg4repts1kj6exwfqn58", // ElevenLabs agent ID
   },
 ]
 
 export function VoiceAgentSelector() {
   const [isOpen, setIsOpen] = React.useState(false)
   const [selectedAgent, setSelectedAgent] = React.useState<VoiceAgent | null>(null)
+  const widgetContainerRef = React.useRef<HTMLDivElement>(null)
+
+  // Handle ElevenLabs widget mounting/unmounting
+  React.useEffect(() => {
+    if (!widgetContainerRef.current) return
+
+    // Clear any existing widget
+    widgetContainerRef.current.innerHTML = ""
+
+    if (selectedAgent?.voiceAgentId) {
+      const agentId = selectedAgent.voiceAgentId // Capture the ID to avoid TypeScript issues
+      
+      // Wait for the custom element to be defined (script loads asynchronously)
+      const initWidget = () => {
+        if (!widgetContainerRef.current) return
+        
+        // Check if custom element is defined
+        if (customElements.get("elevenlabs-convai")) {
+          // Create the ElevenLabs widget element
+          const widgetElement = document.createElement("elevenlabs-convai")
+          widgetElement.setAttribute("agent-id", agentId)
+          
+          // Handle errors
+          widgetElement.addEventListener("error", (e: any) => {
+            console.error("ElevenLabs widget error:", e)
+          })
+
+          // Append to container
+          widgetContainerRef.current!.appendChild(widgetElement)
+        } else {
+          // Retry after a short delay if element not yet defined
+          setTimeout(initWidget, 100)
+        }
+      }
+
+      initWidget()
+    }
+
+    // Cleanup function
+    return () => {
+      if (widgetContainerRef.current) {
+        widgetContainerRef.current.innerHTML = ""
+      }
+    }
+  }, [selectedAgent?.voiceAgentId])
 
   const handleAgentSelect = (agent: VoiceAgent) => {
     if (agent.status === "available") {
       setSelectedAgent(agent)
-      // TODO: Initialize the selected voice agent here
-      console.log("Selected agent:", agent.id)
-      // Optionally close the sheet after selection
-      // setIsOpen(false)
+      console.log("Selected agent:", agent.id, "Voice Agent ID:", agent.voiceAgentId)
+      // Close the sheet after selection
+      setIsOpen(false)
     } else if (agent.status === "preparing") {
       // Show feedback that agent is still being prepared
       setSelectedAgent(null)
@@ -79,6 +128,9 @@ export function VoiceAgentSelector() {
 
   return (
     <>
+      {/* ElevenLabs Widget Container - Widget handles its own positioning */}
+      <div ref={widgetContainerRef} style={{ position: 'fixed', bottom: 0, right: 0, zIndex: 40 }} />
+      
       {/* Floating Chat Bubble */}
       <div className="fixed bottom-6 right-6 z-50">
         <Button
@@ -188,11 +240,13 @@ export function VoiceAgentSelector() {
             </div>
 
             {/* Footer */}
-            <div className="px-6 py-4 border-t bg-muted/30">
-              <p className="text-xs text-muted-foreground text-center">
-                Voice agents are being configured. They will be available soon.
-              </p>
-            </div>
+            {availableAgents.length === 0 && (
+              <div className="px-6 py-4 border-t bg-muted/30">
+                <p className="text-xs text-muted-foreground text-center">
+                  Voice agents are being configured. They will be available soon.
+                </p>
+              </div>
+            )}
           </div>
         </SheetContent>
       </Sheet>
