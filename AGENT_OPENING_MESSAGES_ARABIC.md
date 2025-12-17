@@ -46,7 +46,7 @@ This document contains the first message/greeting that each voice agent should s
 
 ---
 
-## Agent 4: Appointment Coordinator (Arabic/Saudi + English) - Man
+## Agent 4: Appointment Coordinator (Arabic/Saudi + English) - Male
 **Agent Name**: Khalid  
 **Language**: Saudi Arabic
 
@@ -65,7 +65,7 @@ This document contains the first message/greeting that each voice agent should s
 1. **Agent 1 (Alex) - Male**: Uses formal Saudi Arabic greeting, energetic and direct approach suitable for outbound sales calls.
 2. **Agent 2 (Mohammed) - Male**: Uses Egyptian Arabic with elegant, VIP-appropriate language and warm welcome.
 3. **Agent 3 (Samira) - Woman**: Uses Saudi Arabic with friendly, approachable tone suitable for customer service.
-4. **Agent 4 (Khalid) - Man**: Uses Saudi Arabic with efficient, organized tone focused on scheduling.
+4. **Agent 4 (Khalid) - Male**: Uses Saudi Arabic with efficient, organized tone focused on scheduling.
 
 All agents should be able to switch between Arabic and English based on the client's preference during the conversation.
 

@@ -52,7 +52,7 @@ const voiceAgents: VoiceAgent[] = [
   },
   {
     id: "agent-4",
-    name: "Appointment Coordinator (Arabic/Saudi + English) - Man",
+    name: "Appointment Coordinator (Arabic/Saudi + English) - Male",
     description: "Handles scheduling and appointment management",
     icon: <Mic className="h-5 w-5" />,
     color: "bg-amber-500",
