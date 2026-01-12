@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter, Cinzel } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import Script from "next/script"
+import { SupabaseProvider } from "@/components/supabase-provider"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
@@ -39,7 +40,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${inter.variable} ${cinzel.variable} font-sans antialiased`}>
-        {children}
+        <SupabaseProvider>
+          {children}
+        </SupabaseProvider>
         <Analytics />
         <Script
           src="https://unpkg.com/@elevenlabs/convai-widget-embed@beta"

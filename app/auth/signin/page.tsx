@@ -39,12 +39,9 @@ export default function SignInPage() {
         return
       }
 
-      // Wait a moment for session to be set
-      await new Promise(resolve => setTimeout(resolve, 100))
-
       // Redirect to the page they were trying to access, or dashboard
       const redirect = searchParams.get('redirect') || '/'
-      window.location.href = redirect
+      router.push(redirect)
     } catch (err: any) {
       setError(err.message || 'Failed to sign in')
     } finally {

@@ -40,7 +40,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import type { UserRole } from "@/lib/types"
 import { getNavigationForRole, getRoleLabel } from "@/lib/role-permissions"
 import { cn } from "@/lib/utils"
-import { useUser } from "@/lib/hooks/use-user"
+import { useSupabase } from "@/components/supabase-provider"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabase/client"
 import { VoiceAgentSelector } from "@/components/voice-agent-selector"
@@ -69,7 +69,7 @@ interface AppShellProps {
 }
 
 export function AppShell({ children, defaultRole = "sales_manager" }: AppShellProps) {
-  const { user, loading: userLoading } = useUser()
+  const { user, loading: userLoading } = useSupabase()
   const router = useRouter()
   const [currentRole, setCurrentRole] = React.useState<UserRole>(defaultRole)
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
