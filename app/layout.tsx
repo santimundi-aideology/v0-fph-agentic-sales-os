@@ -4,6 +4,7 @@ import { Inter, Cinzel } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import Script from "next/script"
 import { SupabaseProvider } from "@/components/supabase-provider"
+import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
@@ -38,11 +39,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${cinzel.variable} font-sans antialiased`}>
-        <SupabaseProvider>
-          {children}
-        </SupabaseProvider>
+        <ThemeProvider storageKey="fph-theme">
+          <SupabaseProvider>
+            {children}
+          </SupabaseProvider>
+        </ThemeProvider>
         <Analytics />
         <Script
           src="https://unpkg.com/@elevenlabs/convai-widget-embed@beta"

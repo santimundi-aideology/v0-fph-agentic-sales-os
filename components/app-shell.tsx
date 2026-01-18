@@ -44,6 +44,7 @@ import { useSupabase } from "@/components/supabase-provider"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabase/client"
 import { VoiceAgentSelector } from "@/components/voice-agent-selector"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const iconMap = {
   LayoutDashboard,
@@ -161,6 +162,7 @@ export function AppShell({ children, defaultRole = "sales_manager" }: AppShellPr
 
           {/* Right: Environment, Role, User */}
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <Badge variant="outline" className="hidden sm:flex gap-1.5 border-primary/30 text-primary">
               <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
               Sandbox
