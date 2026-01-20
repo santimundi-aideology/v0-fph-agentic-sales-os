@@ -26,7 +26,7 @@ export interface VoiceAgent {
 const voiceAgents: VoiceAgent[] = [
   {
     id: "agent-1",
-    name: "Real Estate Agent (Arabic/Saudi + English) - Male",
+    name: "Real Estate Agent",
     description: "Expert in property sales and customer relations",
     icon: <User className="h-5 w-5" />,
     color: "bg-blue-500",
@@ -35,7 +35,7 @@ const voiceAgents: VoiceAgent[] = [
   },
   {
     id: "agent-2",
-    name: "Luxury Property Specialist (Egyptian + English) - Male",
+    name: "Luxury Property Specialist",
     description: "Specialized in high-end properties and VIP clients",
     icon: <Sparkles className="h-5 w-5" />,
     color: "bg-purple-500",
@@ -44,7 +44,7 @@ const voiceAgents: VoiceAgent[] = [
   },
   {
     id: "agent-3",
-    name: "Customer Service Agent (Arabic/Saudi + English) - Woman",
+    name: "Customer Service Agent",
     description: "Focused on understanding client needs and preferences",
     icon: <Headphones className="h-5 w-5" />,
     color: "bg-emerald-500",
@@ -53,7 +53,7 @@ const voiceAgents: VoiceAgent[] = [
   },
   {
     id: "agent-4",
-    name: "Appointment Coordinator (Arabic/Saudi + English) - Male",
+    name: "Appointment Coordinator",
     description: "Handles scheduling and appointment management",
     icon: <Mic className="h-5 w-5" />,
     color: "bg-amber-500",
