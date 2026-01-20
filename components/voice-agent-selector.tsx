@@ -11,6 +11,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
+import { RetellWebClient } from "retell-client-js-sdk"
 
 export interface VoiceAgent {
   id: string
@@ -30,16 +31,16 @@ const voiceAgents: VoiceAgent[] = [
     icon: <User className="h-5 w-5" />,
     color: "bg-blue-500",
     status: "available",
-    voiceAgentId: "agent_5801kc9fq5m8fz2v8w5xvtq1ad9v", // ElevenLabs agent ID
+    voiceAgentId: process.env.NEXT_PUBLIC_REAL_ESTATE_AGENT_ID || "agent_089b6346edcb40edf6b82fc5fe", // Retell agent ID
   },
   {
     id: "agent-2",
-    name: "Luxury Property Specialist (Egyptian + English) - Male",  
+    name: "Luxury Property Specialist (Egyptian + English) - Male",
     description: "Specialized in high-end properties and VIP clients",
     icon: <Sparkles className="h-5 w-5" />,
     color: "bg-purple-500",
     status: "available",
-    voiceAgentId: "agent_9701kcmvm3zmf82a4fcwq8fkdp4k", // ElevenLabs agent ID
+    voiceAgentId: process.env.NEXT_PUBLIC_LUXURY_PROPERTY_AGENT_ID || "agent_c2dd0f4655988565e922807e41", // Retell agent ID
   },
   {
     id: "agent-3",
@@ -48,7 +49,7 @@ const voiceAgents: VoiceAgent[] = [
     icon: <Headphones className="h-5 w-5" />,
     color: "bg-emerald-500",
     status: "available",
-    voiceAgentId: "agent_7101kcmvvpj2fh4sj4tzdcya7rmz", // ElevenLabs agent ID
+    voiceAgentId: process.env.NEXT_PUBLIC_CUSTOMER_SERVICE_AGENT_ID || "agent_1ccce6782d0c7eedc3eef2aea2", // Retell agent ID
   },
   {
     id: "agent-4",
@@ -57,61 +58,80 @@ const voiceAgents: VoiceAgent[] = [
     icon: <Mic className="h-5 w-5" />,
     color: "bg-amber-500",
     status: "available",
-    voiceAgentId: "agent_4001kcmvzg4repts1kj6exwfqn58", // ElevenLabs agent ID
+    voiceAgentId: process.env.NEXT_PUBLIC_APPOINTMENT_COORDINATOR_AGENT_ID || "agent_47f61bb367ba9f2f20228212a5", // Retell agent ID
   },
 ]
 
 export function VoiceAgentSelector() {
   const [isOpen, setIsOpen] = React.useState(false)
   const [selectedAgent, setSelectedAgent] = React.useState<VoiceAgent | null>(null)
-  const widgetContainerRef = React.useRef<HTMLDivElement>(null)
+  const [isCallActive, setIsCallActive] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(false)
+  const retellClientRef = React.useRef<RetellWebClient | null>(null)
 
-  // Handle ElevenLabs widget mounting/unmounting
+  // Initialize Retell Web Client
   React.useEffect(() => {
-    if (!widgetContainerRef.current) return
+    if (typeof window !== 'undefined') {
+      retellClientRef.current = new RetellWebClient()
+    }
 
-    // Clear any existing widget
-    widgetContainerRef.current.innerHTML = ""
-
-    if (selectedAgent?.voiceAgentId) {
-      const agentId = selectedAgent.voiceAgentId // Capture the ID to avoid TypeScript issues
-      
-      // Wait for the custom element to be defined (script loads asynchronously)
-      const initWidget = () => {
-        if (!widgetContainerRef.current) return
-        
-        // Check if custom element is defined
-        if (customElements.get("elevenlabs-convai")) {
-          // Create the ElevenLabs widget element
-          const widgetElement = document.createElement("elevenlabs-convai")
-          widgetElement.setAttribute("agent-id", agentId)
-          
-          // Handle errors
-          widgetElement.addEventListener("error", (e: any) => {
-            console.error("ElevenLabs widget error:", e)
-          })
-
-          // Append to container
-          widgetContainerRef.current!.appendChild(widgetElement)
-        } else {
-          // Retry after a short delay if element not yet defined
-          setTimeout(initWidget, 100)
-        }
+    return () => {
+      if (retellClientRef.current) {
+        retellClientRef.current.stopCall()
       }
+    }
+  }, [])
 
-      initWidget()
+  // Handle Retell call starting/stopping
+  React.useEffect(() => {
+    if (!selectedAgent?.voiceAgentId || !retellClientRef.current) return
+
+    const startRetellCall = async () => {
+      setIsLoading(true)
+      try {
+        // Get access token from backend
+        const response = await fetch('/api/retell-web-call', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ agentId: selectedAgent.voiceAgentId }),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to get access token')
+        }
+
+        const { accessToken } = await response.json()
+
+        // Start the call with the access token
+        await retellClientRef.current!.startCall({ accessToken })
+        setIsCallActive(true)
+        console.log("Retell call started for agent:", selectedAgent.id)
+
+      } catch (error) {
+        console.error("Error starting Retell call:", error)
+        setSelectedAgent(null)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (selectedAgent && !isCallActive) {
+      startRetellCall()
     }
 
     // Cleanup function
     return () => {
-      if (widgetContainerRef.current) {
-        widgetContainerRef.current.innerHTML = ""
+      if (retellClientRef.current && isCallActive) {
+        retellClientRef.current.stopCall()
+        setIsCallActive(false)
       }
     }
-  }, [selectedAgent?.voiceAgentId])
+  }, [selectedAgent, isCallActive])
 
   const handleAgentSelect = (agent: VoiceAgent) => {
-    if (agent.status === "available") {
+    if (agent.status === "available" && !isLoading) {
       setSelectedAgent(agent)
       console.log("Selected agent:", agent.id, "Voice Agent ID:", agent.voiceAgentId)
       // Close the sheet after selection
@@ -123,32 +143,69 @@ export function VoiceAgentSelector() {
     }
   }
 
+  const handleStopCall = () => {
+    if (retellClientRef.current) {
+      retellClientRef.current.stopCall()
+      setIsCallActive(false)
+      setSelectedAgent(null)
+    }
+  }
+
   const availableAgents = voiceAgents.filter((agent) => agent.status === "available")
   const hasAvailableAgents = availableAgents.length > 0
 
   return (
     <>
-      {/* ElevenLabs Widget Container - Widget handles its own positioning */}
-      <div ref={widgetContainerRef} style={{ position: 'fixed', bottom: 0, right: 0, zIndex: 40 }} />
-      
+      {/* Retell Call Status Indicator */}
+      {isCallActive && selectedAgent && (
+        <div className="fixed bottom-24 right-6 z-50 bg-card border rounded-lg p-4 shadow-lg max-w-xs">
+          <div className="flex items-center gap-3">
+            <div className={cn("h-3 w-3 rounded-full animate-pulse", selectedAgent.color.replace('bg-', 'bg-'))} />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate">{selectedAgent.name.split(' (')[0]}</p>
+              <p className="text-xs text-muted-foreground">Call in progress</p>
+            </div>
+            <Button
+              onClick={handleStopCall}
+              size="sm"
+              variant="outline"
+              className="h-8 px-3"
+            >
+              End Call
+            </Button>
+          </div>
+        </div>
+      )}
+
       {/* Floating Chat Bubble */}
       <div className="fixed bottom-6 right-6 z-50">
         <Button
           onClick={() => setIsOpen(true)}
           size="lg"
+          disabled={isLoading}
           className={cn(
             "h-16 w-16 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300",
             "bg-gradient-to-br from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70",
             "flex items-center justify-center",
             "relative group",
             "border-2 border-primary/20",
-            "hover:scale-110 active:scale-95"
+            "hover:scale-110 active:scale-95",
+            isLoading && "opacity-70 cursor-not-allowed"
           )}
           aria-label="Open voice agent selector"
         >
-          <MessageCircle className="h-7 w-7 text-primary-foreground" />
-          {hasAvailableAgents && (
+          {isLoading ? (
+            <div className="h-7 w-7 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
+          ) : (
+            <MessageCircle className="h-7 w-7 text-primary-foreground" />
+          )}
+          {hasAvailableAgents && !isCallActive && (
             <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-emerald-500 border-2 border-background animate-pulse flex items-center justify-center">
+              <span className="h-2 w-2 rounded-full bg-white" />
+            </span>
+          )}
+          {isCallActive && (
+            <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 border-2 border-background animate-pulse flex items-center justify-center">
               <span className="h-2 w-2 rounded-full bg-white" />
             </span>
           )}
@@ -172,20 +229,21 @@ export function VoiceAgentSelector() {
               {voiceAgents.map((agent) => {
                 const isPreparing = agent.status === "preparing"
                 const isSelected = selectedAgent?.id === agent.id
+                const isDisabled = isPreparing || isLoading || isCallActive
 
                 return (
                   <button
                     key={agent.id}
                     onClick={() => handleAgentSelect(agent)}
-                    disabled={isPreparing}
+                    disabled={isDisabled}
                     className={cn(
                       "w-full p-4 rounded-xl border-2 transition-all duration-200",
                       "text-left hover:shadow-lg hover:scale-[1.02]",
                       isSelected
                         ? "border-primary bg-primary/10 shadow-lg ring-2 ring-primary/20"
                         : "border-border bg-card hover:border-primary/50 hover:bg-accent/50",
-                      isPreparing && "opacity-60 cursor-not-allowed",
-                      !isPreparing && "cursor-pointer"
+                      isDisabled && "opacity-60 cursor-not-allowed",
+                      !isDisabled && "cursor-pointer"
                     )}
                   >
                     <div className="flex items-start gap-4">
@@ -211,7 +269,17 @@ export function VoiceAgentSelector() {
                               Preparing
                             </span>
                           )}
-                          {agent.status === "available" && (
+                          {isLoading && isSelected && (
+                            <span className="px-2.5 py-1 text-xs rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                              Connecting...
+                            </span>
+                          )}
+                          {isCallActive && isSelected && (
+                            <span className="px-2.5 py-1 text-xs rounded-full bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20">
+                              On Call
+                            </span>
+                          )}
+                          {agent.status === "available" && !isSelected && (
                             <span className="px-2.5 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                               Available
                             </span>
@@ -229,7 +297,7 @@ export function VoiceAgentSelector() {
                         <div className="flex items-center gap-2">
                           <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
                           <p className="text-xs text-primary font-medium">
-                            Agent selected - Ready to connect
+                            {isLoading ? "Connecting to agent..." : isCallActive ? "Call in progress" : "Agent selected - Ready to connect"}
                           </p>
                         </div>
                       </div>
