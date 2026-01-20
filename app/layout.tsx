@@ -3,7 +3,6 @@ import type { Metadata } from "next"
 import { Inter, Cinzel } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import Script from "next/script"
-import { SupabaseProvider } from "@/components/supabase-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 
@@ -42,9 +41,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${cinzel.variable} font-sans antialiased`}>
         <ThemeProvider storageKey="fph-theme">
-          <SupabaseProvider>
-            {children}
-          </SupabaseProvider>
+          {children}
         </ThemeProvider>
         <Analytics />
         <Script

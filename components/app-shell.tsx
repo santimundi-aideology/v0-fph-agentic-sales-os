@@ -36,13 +36,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import type { UserRole } from "@/lib/types"
 import { getNavigationForRole, getRoleLabel } from "@/lib/role-permissions"
 import { cn } from "@/lib/utils"
-import { useSupabase } from "@/components/supabase-provider"
 import { useRouter } from "next/navigation"
-import { supabase } from "@/lib/supabase/client"
 import { VoiceAgentSelector } from "@/components/voice-agent-selector"
 import { ThemeToggle } from "@/components/theme-toggle"
 
@@ -70,7 +67,6 @@ interface AppShellProps {
 }
 
 export function AppShell({ children, defaultRole = "sales_manager" }: AppShellProps) {
-  const { user, loading: userLoading } = useSupabase()
   const router = useRouter()
   const [currentRole, setCurrentRole] = React.useState<UserRole>(defaultRole)
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
@@ -96,32 +92,6 @@ export function AppShell({ children, defaultRole = "sales_manager" }: AppShellPr
     }
   }
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    router.push('/auth/signin')
-    router.refresh()
-  }
-
-  // Get user initials for avatar - memoized
-  const userInitials = React.useMemo(() => {
-    if (!user) return "U"
-    const name = user.user_metadata?.name || user.email || "U"
-    const parts = name.split(" ")
-    if (parts.length >= 2) {
-      return (parts[0][0] + parts[1][0]).toUpperCase()
-    }
-    return name.substring(0, 2).toUpperCase()
-  }, [user])
-
-  const userName = React.useMemo(() => {
-    if (!user) return "Guest"
-    return user.user_metadata?.name || user.email?.split("@")[0] || "User"
-  }, [user])
-
-  const userEmail = React.useMemo(() => {
-    if (!user) return ""
-    return user.email || ""
-  }, [user])
 
   const navigation = React.useMemo(
     () => getNavigationForRole(currentRole),
@@ -190,39 +160,6 @@ export function AppShell({ children, defaultRole = "sales_manager" }: AppShellPr
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* User Menu */}
-            {!userLoading && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-                        {userInitials}
-                      </AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>
-                    <div className="flex flex-col gap-1">
-                      <div className="text-sm font-medium">{userName}</div>
-                      <div className="text-xs text-muted-foreground">{userEmail}</div>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => router.push('/settings')}>
-                    Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push('/settings')}>
-                    Preferences
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
           </div>
         </div>
       </header>
