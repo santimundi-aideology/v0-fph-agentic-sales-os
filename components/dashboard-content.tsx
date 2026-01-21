@@ -1,5 +1,6 @@
 "use client"
 
+import { format } from "date-fns"
 import {
   TrendingUp,
   Phone,
@@ -238,7 +239,7 @@ export function DashboardContent() {
                       <div className="font-medium text-sm">{appointment.prospectName}</div>
                       <div className="text-xs text-muted-foreground">{appointment.propertyName}</div>
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <span>{new Date(appointment.scheduledDate).toLocaleDateString()}</span>
+                        <span>{format(new Date(appointment.scheduledDate), "MM/dd/yyyy")}</span>
                         <Separator orientation="vertical" className="h-3" />
                         <span>{appointment.assignedRepName}</span>
                       </div>
