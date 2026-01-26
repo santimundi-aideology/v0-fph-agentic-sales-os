@@ -372,7 +372,7 @@ Migrations should be applied via Supabase Dashboard SQL Editor or Supabase CLI.
 Required in `.env.local`:
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your-anon-key
 ```
 
 ---

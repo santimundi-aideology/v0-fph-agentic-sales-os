@@ -4,7 +4,7 @@ import { createBrowserClient } from '@supabase/ssr'
 
 function getSupabasePublicEnv() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {
     // Important: do NOT throw at module import time.
@@ -12,7 +12,7 @@ function getSupabasePublicEnv() {
     throw new Error(
       'Missing Supabase environment variables. Please configure them in your deployment environment.\n' +
         `NEXT_PUBLIC_SUPABASE_URL: ${supabaseUrl ? 'Set' : 'Missing'}\n` +
-        `NEXT_PUBLIC_SUPABASE_ANON_KEY: ${supabaseAnonKey ? 'Set' : 'Missing'}`
+        `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY: ${supabaseAnonKey ? 'Set' : 'Missing'}`
     )
   }
 

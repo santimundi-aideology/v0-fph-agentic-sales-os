@@ -20,7 +20,7 @@ cp .env.example .env.local
 Then update the values:
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your-anon-key-here
 ```
 
 ### 2. Run the Initial Migration
