@@ -30,12 +30,14 @@ const channelIcons = {
 
 export function DashboardContent() {
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-8 py-6 md:py-8">
       {/* Page Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-3xl font-serif font-bold text-balance">Command Center</h1>
-          <p className="text-muted-foreground mt-1">Real-time AI sales agent operations across all channels</p>
+      <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+        <div className="max-w-2xl space-y-2">
+          <h1 className="font-serif text-3xl font-bold tracking-tight text-balance md:text-4xl">Command Center</h1>
+          <p className="text-base leading-relaxed text-muted-foreground">
+            Real-time AI sales agent operations across all channels
+          </p>
         </div>
         <div className="flex gap-3">
           <Button variant="outline" size="lg" className="gap-2 bg-transparent">

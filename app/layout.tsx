@@ -1,7 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter, Cinzel } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/react"
 import Script from "next/script"
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
@@ -10,8 +10,8 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-serif", weight: ["400", "600", "700"] })
 
 export const metadata: Metadata = {
-  title: "FPH Agentic Sales OS",
-  description: "AI Real-Estate Sales Agent Operating System - First Projects Holding",
+  title: "Etisalat Projects Holding — Agentic Sales OS",
+  description: "AI Real-Estate Sales Agent Operating System — Etisalat Projects Holding",
   generator: "v0.app",
   icons: {
     icon: [

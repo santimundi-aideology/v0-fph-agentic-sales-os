@@ -6,11 +6,11 @@ import { Progress } from "@/components/ui/progress"
 
 export function AnalyticsContent() {
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-8 py-6 md:py-8">
       {/* Page Header */}
-      <div>
-        <h1 className="text-3xl font-serif font-bold text-balance">Analytics Dashboard</h1>
-        <p className="text-muted-foreground mt-1">Performance metrics and insights</p>
+      <div className="max-w-2xl space-y-2">
+        <h1 className="font-serif text-3xl font-bold tracking-tight text-balance md:text-4xl">Analytics Dashboard</h1>
+        <p className="text-base leading-relaxed text-muted-foreground">Performance metrics and insights</p>
       </div>
 
       {/* Overview Metrics */}

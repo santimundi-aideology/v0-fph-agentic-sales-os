@@ -11,11 +11,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export function SettingsContent() {
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-8 py-6 md:py-8">
       {/* Page Header */}
-      <div>
-        <h1 className="text-3xl font-serif font-bold text-balance">Settings</h1>
-        <p className="text-muted-foreground mt-1">Configure your AI agent and system preferences</p>
+      <div className="max-w-2xl space-y-2">
+        <h1 className="font-serif text-3xl font-bold tracking-tight text-balance md:text-4xl">Settings</h1>
+        <p className="text-base leading-relaxed text-muted-foreground">
+          Configure your AI agent and system preferences
+        </p>
       </div>
 
       <Tabs defaultValue="agent" className="space-y-6">
