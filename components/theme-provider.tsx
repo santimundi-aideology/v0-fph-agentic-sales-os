@@ -16,21 +16,26 @@ type ThemeProviderState = {
 }
 
 const initialState: ThemeProviderState = {
-  theme: "system",
+  theme: "light",
   setTheme: () => null,
 }
 
 const ThemeProviderContext = React.createContext<ThemeProviderState>(initialState)
 
+function readStoredTheme(storageKey: string, defaultTheme: Theme): Theme {
+  if (typeof window === "undefined") return defaultTheme
+  const stored = localStorage.getItem(storageKey) as Theme | null
+  if (stored === "light" || stored === "dark") return stored
+  return defaultTheme
+}
+
 export function ThemeProvider({
   children,
-  defaultTheme = "system",
+  defaultTheme = "light",
   storageKey = "fph-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = React.useState<Theme>(
-    () => (typeof window !== "undefined" && localStorage.getItem(storageKey)) as Theme || defaultTheme
-  )
+  const [theme, setTheme] = React.useState<Theme>(() => readStoredTheme(storageKey, defaultTheme))
 
   React.useEffect(() => {
     const root = window.document.documentElement

@@ -1,34 +1,29 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter, Cinzel } from "next/font/google"
+import localFont from "next/font/local"
 import { Analytics } from "@vercel/analytics/react"
 import Script from "next/script"
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
-const cinzel = Cinzel({ subsets: ["latin"], variable: "--font-serif", weight: ["400", "600", "700"] })
+const suisseIntl = localFont({
+  src: [
+    { path: "../public/fonts/SuisseIntl-Regular.otf", weight: "400", style: "normal" },
+    { path: "../public/fonts/SuisseIntl-Medium.otf", weight: "500", style: "normal" },
+    { path: "../public/fonts/SuisseIntl-Bold.otf", weight: "700", style: "normal" },
+  ],
+  variable: "--font-suisse",
+  display: "swap",
+  fallback: ["Arial", "Helvetica Neue", "Helvetica", "sans-serif"],
+})
 
 export const metadata: Metadata = {
   title: "Etisalat Projects Holding — Agentic Sales OS",
   description: "AI Real-Estate Sales Agent Operating System — Etisalat Projects Holding",
   generator: "v0.app",
   icons: {
-    icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
-    apple: "/apple-icon.png",
+    icon: [{ url: "/favicon.ico", sizes: "any" }],
+    apple: "/logo.png",
   },
 }
 
@@ -39,8 +34,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${cinzel.variable} font-sans antialiased`}>
-        <ThemeProvider storageKey="fph-theme">
+      <body className={`${suisseIntl.variable} font-sans antialiased`}>
+        <ThemeProvider defaultTheme="light" storageKey="fph-theme">
           {children}
         </ThemeProvider>
         <Analytics />

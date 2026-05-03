@@ -77,8 +77,8 @@
 }
 
 @theme inline {
-  --font-sans: "Inter", "Inter Fallback";
-  --font-serif: "Cinzel", "Cinzel Fallback";
+  --font-sans: var(--font-suisse), Arial, Helvetica, sans-serif;
+  --font-serif: var(--font-suisse), Arial, Helvetica, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

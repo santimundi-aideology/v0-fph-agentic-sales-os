@@ -114,13 +114,13 @@ export function AppShell({ children, defaultRole = "sales_manager" }: AppShellPr
               {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
             <Link href="/" className="flex min-w-0 items-center gap-2 sm:gap-2.5">
-              <span className="relative block h-10 w-[min(100%,12.5rem)] shrink-0 sm:h-11 sm:w-[15rem]">
+              <span className="relative block h-12 w-[min(100%,15rem)] shrink-0 sm:h-14 sm:w-[18rem]">
                 <Image
-                  src="/etisalat-dark.png"
+                  src="/logo.png"
                   alt=""
                   fill
                   className="object-contain object-left"
-                  sizes="(max-width:768px) 240px, 260px"
+                  sizes="(max-width:768px) 280px, 320px"
                   priority
                 />
               </span>
@@ -189,13 +189,13 @@ export function AppShell({ children, defaultRole = "sales_manager" }: AppShellPr
         {/* Large logo + title (desktop only — keeps thin top bar at h-16 while logo ~2× compact header size) */}
         <div className="hidden shrink-0 flex-col gap-3 border-b border-border/60 px-4 pb-5 pt-6 lg:flex">
           <Link href="/" className="flex flex-col gap-3 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
-            <span className="relative mx-auto block h-20 w-full max-w-[220px]">
+            <span className="relative mx-auto block h-32 w-full max-w-[248px]">
               <Image
-                src="/etisalat-dark.png"
+                src="/logo.png"
                 alt=""
                 fill
                 className="object-contain object-center"
-                sizes="240px"
+                sizes="320px"
                 priority
               />
             </span>
