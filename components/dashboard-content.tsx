@@ -20,6 +20,7 @@ import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
 import { mockAppointments, mockConversations, getChannelColor } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
+import { FadeIn } from "@/components/motion"
 
 const channelIcons = {
   phone: Phone,
@@ -30,7 +31,7 @@ const channelIcons = {
 
 export function DashboardContent() {
   return (
-    <div className="space-y-8 py-6 md:py-8">
+    <FadeIn viewport={false} className="space-y-8 py-6 md:py-8">
       {/* Page Header */}
       <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div className="max-w-2xl space-y-2">
@@ -307,6 +308,6 @@ export function DashboardContent() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </FadeIn>
   )
 }

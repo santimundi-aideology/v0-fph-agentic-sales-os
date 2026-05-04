@@ -140,8 +140,8 @@ export function AnalyticsContent() {
         <CardContent>
           <div className="space-y-4">
             {[
-              { name: "Riyadh Q1 Luxury Villas", attempts: 1250, connects: 525, qualified: 189, booked: 87 },
-              { name: "Jeddah Waterfront Collection", attempts: 980, connects: 412, qualified: 156, booked: 68 },
+              { name: "Dubai Q1 Luxury Villas", attempts: 1250, connects: 525, qualified: 189, booked: 87 },
+              { name: "Abu Dhabi Waterfront Collection", attempts: 980, connects: 412, qualified: 156, booked: 68 },
               { name: "Premium Penthouses Campaign", attempts: 756, connects: 298, qualified: 98, booked: 42 },
             ].map((campaign) => (
               <div key={campaign.name} className="p-4 rounded-xl border border-border/50 space-y-3">

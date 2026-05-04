@@ -62,7 +62,7 @@ const { data, error } = await supabase
     name: 'John Doe',
     email: 'john@example.com',
     phone: '+966501234567',
-    city: 'Riyadh',
+    city: 'Dubai',
     status: 'new'
   })
   .select()

@@ -12,9 +12,11 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { mockUsers } from "@/lib/mock-data"
 import { getRoleLabel } from "@/lib/role-permissions"
+import { useI18n } from "@/lib/i18n-context"
 
 export function UsersContent() {
   const [inviteOpen, setInviteOpen] = useState(false)
+  const { language } = useI18n()
 
   return (
     <div className="p-6 space-y-6">
@@ -93,7 +95,7 @@ export function UsersContent() {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Badge variant="outline">{getRoleLabel(user.role)}</Badge>
+                <Badge variant="outline">{getRoleLabel(user.role, language)}</Badge>
                 <Badge
                   className={
                     user.status === "active"

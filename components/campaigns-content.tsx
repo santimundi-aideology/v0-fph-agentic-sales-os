@@ -79,7 +79,7 @@ export function CampaignsContent() {
             <div className="space-y-6 pt-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Campaign Name</Label>
-                <Input id="name" placeholder="e.g., Riyadh Q1 Luxury Villas" />
+                <Input id="name" placeholder="e.g., Dubai Q1 Luxury Villas" />
               </div>
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
@@ -89,8 +89,8 @@ export function CampaignsContent() {
                       <SelectValue placeholder="Select segment" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="hnw-riyadh">High-Net-Worth, Riyadh</SelectItem>
-                      <SelectItem value="hnw-jeddah">High-Net-Worth, Jeddah</SelectItem>
+                      <SelectItem value="hnw-dubai">High-Net-Worth, Dubai</SelectItem>
+                      <SelectItem value="hnw-abu-dhabi">High-Net-Worth, Abu Dhabi</SelectItem>
                       <SelectItem value="investors">Property Investors</SelectItem>
                       <SelectItem value="first-home">First-Time Buyers</SelectItem>
                     </SelectContent>

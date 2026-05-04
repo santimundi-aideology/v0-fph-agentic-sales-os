@@ -148,7 +148,7 @@ import { useProperties } from '@/lib/hooks/use-properties'
 
 function PropertiesList() {
   const { properties, loading, error } = useProperties({ 
-    city: 'Riyadh',
+    city: 'Dubai',
     status: 'available'
   })
   

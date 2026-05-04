@@ -43,9 +43,8 @@ export function PropertiesContent() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Cities</SelectItem>
-            <SelectItem value="riyadh">Riyadh</SelectItem>
-            <SelectItem value="jeddah">Jeddah</SelectItem>
-            <SelectItem value="dammam">Dammam</SelectItem>
+            <SelectItem value="dubai">Dubai</SelectItem>
+            <SelectItem value="abu-dhabi">Abu Dhabi</SelectItem>
           </SelectContent>
         </Select>
         <Select>

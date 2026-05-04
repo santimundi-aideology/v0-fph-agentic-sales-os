@@ -286,7 +286,7 @@ export function ConversationsContent() {
                             Prospect
                           </Badge>
                           <div className="flex-1 text-sm leading-relaxed">
-                            Actually yes, I'm looking for something in the 3 to 5 million SAR range. What do you have
+                            Actually yes, I'm looking for something in the 3 to 5 million AED range. What do you have
                             available?
                           </div>
                         </div>
@@ -348,7 +348,7 @@ export function ConversationsContent() {
                             <span className="text-sm font-medium">Matched Properties</span>
                           </div>
                           <p className="text-xs text-muted-foreground">
-                            Found 3 properties matching budget: 3-5M SAR, location: Riyadh
+                            Found 3 properties matching budget: 3-5M AED, location: Dubai
                           </p>
                           <Badge variant="outline" className="text-xs mt-1 bg-emerald-500/10 border-emerald-500/30">
                             Completed

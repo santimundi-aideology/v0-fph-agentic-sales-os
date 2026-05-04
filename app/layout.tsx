@@ -4,6 +4,8 @@ import localFont from "next/font/local"
 import { Analytics } from "@vercel/analytics/react"
 import Script from "next/script"
 import { ThemeProvider } from "@/components/theme-provider"
+import { PageTransition } from "@/components/motion"
+import { I18nProvider } from "@/lib/i18n-context"
 import "./globals.css"
 
 const suisseIntl = localFont({
@@ -36,7 +38,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${suisseIntl.variable} font-sans antialiased`}>
         <ThemeProvider defaultTheme="light" storageKey="fph-theme">
-          {children}
+          <I18nProvider>
+            <PageTransition>{children}</PageTransition>
+          </I18nProvider>
         </ThemeProvider>
         <Analytics />
         <Script

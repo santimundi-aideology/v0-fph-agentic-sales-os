@@ -201,6 +201,7 @@ export function SettingsContent() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="aed">UAE Dirham (AED)</SelectItem>
                     <SelectItem value="sar">Saudi Riyal (SAR)</SelectItem>
                     <SelectItem value="usd">US Dollar (USD)</SelectItem>
                     <SelectItem value="eur">Euro (EUR)</SelectItem>
