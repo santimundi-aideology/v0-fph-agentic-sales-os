@@ -68,7 +68,7 @@ interface AppShellProps {
 }
 
 export function AppShell({ children, defaultRole = "sales_manager" }: AppShellProps) {
-  const { language, setLanguage, t } = useI18n()
+  const { language, t } = useI18n()
   const [currentRole, setCurrentRole] = React.useState<UserRole>(defaultRole)
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
   const [mounted, setMounted] = React.useState(false)
@@ -148,30 +148,6 @@ export function AppShell({ children, defaultRole = "sales_manager" }: AppShellPr
           {/* Right: Environment, Role, User */}
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex items-center gap-1">
-              <div
-                className="inline-flex gap-0.5 rounded-md border border-border/60 bg-background/50 p-0.5"
-                role="group"
-                aria-label={t("Interface language", "لغة الواجهة")}
-              >
-                <Button
-                  type="button"
-                  size="sm"
-                  variant={language === "en" ? "secondary" : "ghost"}
-                  className="h-8 px-2 text-xs"
-                  onClick={() => setLanguage("en")}
-                >
-                  English
-                </Button>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant={language === "ar" ? "secondary" : "ghost"}
-                  className="h-8 px-2 text-xs"
-                  onClick={() => setLanguage("ar")}
-                >
-                  العربية
-                </Button>
-              </div>
               <ZoomControls />
               <ThemeToggle />
             </div>
