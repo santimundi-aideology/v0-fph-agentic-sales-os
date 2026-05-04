@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { MessageCircle, X, Mic, Sparkles, User, Headphones } from "lucide-react"
+import { MessageCircle, X, Mic, MicOff, Sparkles, User, Headphones } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import {
@@ -67,6 +67,7 @@ export function VoiceAgentSelector() {
   const [selectedAgent, setSelectedAgent] = React.useState<VoiceAgent | null>(null)
   const [isCallActive, setIsCallActive] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
+  const [presenterMicMuted, setPresenterMicMuted] = React.useState(false)
   const retellClientRef = React.useRef<RetellWebClient | null>(null)
 
   // Initialize Retell Web Client
@@ -106,6 +107,7 @@ export function VoiceAgentSelector() {
 
         // Start the call with the access token
         await retellClientRef.current!.startCall({ accessToken })
+        setPresenterMicMuted(false)
         setIsCallActive(true)
         console.log("Retell call started for agent:", selectedAgent.id)
 
@@ -146,9 +148,23 @@ export function VoiceAgentSelector() {
   const handleStopCall = () => {
     if (retellClientRef.current) {
       retellClientRef.current.stopCall()
+      setPresenterMicMuted(false)
       setIsCallActive(false)
       setSelectedAgent(null)
     }
+  }
+
+  const togglePresenterMicMute = () => {
+    const client = retellClientRef.current
+    if (!client || !isCallActive) return
+    setPresenterMicMuted((prev) => {
+      if (prev) {
+        client.unmute()
+        return false
+      }
+      client.mute()
+      return true
+    })
   }
 
   const availableAgents = voiceAgents.filter((agent) => agent.status === "available")
@@ -156,6 +172,21 @@ export function VoiceAgentSelector() {
 
   return (
     <>
+      {isCallActive && (
+        <div className="fixed top-3 end-3 z-[60] flex flex-col items-end gap-1 pt-[env(safe-area-inset-top)] pe-[env(safe-area-inset-end)]">
+          <Button
+            type="button"
+            size="icon"
+            variant={presenterMicMuted ? "secondary" : "default"}
+            className="h-11 w-11 min-h-11 min-w-11 rounded-full shadow-md"
+            onClick={togglePresenterMicMute}
+            title={presenterMicMuted ? "Unmute microphone" : "Mute microphone"}
+            aria-label={presenterMicMuted ? "Unmute microphone" : "Mute microphone"}
+          >
+            {presenterMicMuted ? <Mic className="h-5 w-5" /> : <MicOff className="h-5 w-5" />}
+          </Button>
+        </div>
+      )}
       {/* Retell Call Status Indicator */}
       {isCallActive && selectedAgent && (
         <div className="fixed bottom-24 right-6 z-50 bg-card border rounded-lg p-4 shadow-lg max-w-xs">
